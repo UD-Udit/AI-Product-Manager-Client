@@ -72,7 +72,6 @@ function HomePage() {
 
   const handleApiCall = async (prompt) => {
     try {
-      console.log(apiKey);
       setLoading(true);
       if(prompt.length === 0) return;
       const response = await fetch(`https://api.openai.com/v1/audio/speech`, {
