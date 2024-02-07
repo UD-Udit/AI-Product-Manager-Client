@@ -45,7 +45,7 @@ function HomePage() {
     try{
         setLoading(true);
         if(prompt.length === 0) return;
-        const response = await axios.post("http://localhost:8080/assistant/chat", {
+        const response = await axios.post("https://ai-product-manager.onrender.com/assistant/chat", {
                 message: prompt,
                 threadId: threadId,
                 assistantId: assistantId
@@ -109,7 +109,7 @@ function HomePage() {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:8080/assistant/",
+        "https://ai-product-manager.onrender.com/assistant/",
         {},
         {
           headers: {

@@ -24,7 +24,7 @@ export const Response = ({ audioURL, message, loading, handleStart, threadId}) =
       if (!threadId) return;
       console.log(threadId);
       const response = await axios.get(
-        `http://localhost:8080/assistant/${threadId}`,
+        `https://ai-product-manager.onrender.com/${threadId}`,
         {
           headers: {
             "Content-Type": "application/json",

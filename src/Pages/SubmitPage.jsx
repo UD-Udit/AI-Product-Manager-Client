@@ -26,7 +26,7 @@ export const SubmitPage = () => {
       setLoading(true);
       setError("");
       setMessage("Generating and sending your report to your mail...");
-      const response = await axios.post("http://localhost:8080/prompt/getSummary", {
+      const response = await axios.post("https://ai-product-manager.onrender.com/prompt/getSummary", {
         email: email,
         conversation: conversation.messages,
       },{
@@ -64,7 +64,7 @@ export const SubmitPage = () => {
       setLoading(true);
       setError("");
       setMessage("Saving Conversation...");
-      const response = await axios.post("http://localhost:8080/submitConversation", {
+      const response = await axios.post("https://ai-product-manager.onrender.com/submitConversation", {
         email: email,
         conversation: conversation.messages,
       }, {
