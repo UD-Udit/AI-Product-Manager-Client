@@ -5,12 +5,14 @@ import { Response } from "../Components/Response";
 import axios from "axios";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 
+
 function HomePage() {
   const [audioURL, setAudioURL] = useState(null);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [assistantId, setAssistantId] = useState("");
   const [threadId, setThreadId] = useState("");
+  const [messageNo, setMessageNo] = useState(0);
   const apiKey = process.env.REACT_APP_API_KEY;
 
   const {
@@ -95,6 +97,7 @@ function HomePage() {
       const voiceURL = URL.createObjectURL(audioStream);
       setAudioURL(voiceURL);
       setMessage(prompt);
+      setMessageNo((messageNo) => messageNo+1);
       
     }catch (error) {
         setMessage("Something went wrong!");
@@ -129,29 +132,28 @@ function HomePage() {
   };
 
   return (   
-    <div className="w-full bg-[#121112] h-screen flex flex-col gap-10">
+    <div className="w-full bg-[#121112] h-screen flex flex-col gap-2">
       <Navbar />
       <div className=" flex gap-6 flex-col justify-center items-center">
+      
       <Response 
         audioURL={audioURL} 
         message={message} 
         loading={loading} 
-        handleStart={handleStart} 
-        stopListening={SpeechRecognition.stopListening}
-        threadId={threadId} />
+        handleStart={handleStart}
+        messageNo={messageNo}  />
       <InputBar 
-        handleAssistantCall={handleAssistantCall} 
+        transcript={transcript} 
         handleStart = {handleStart}
-        resetTranscript={resetTranscript}
-        browserSupportsContinuousListening = {browserSupportsContinuousListening}
         handleStop={handleStop}
         listening={listening}
-        transcript={transcript} 
         stopListening={SpeechRecognition.stopListening}
-        startListening = {SpeechRecognition.startListening}
         handleStartConversation={handleStartConversation}
-        threadId={threadId}
         loading={loading}
+        startListening = {SpeechRecognition.startListening}
+        browserSupportsContinuousListening = {browserSupportsContinuousListening}
+        resetTranscript={resetTranscript}
+        threadId={threadId}
       />
 
         </div>

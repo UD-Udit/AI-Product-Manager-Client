@@ -4,6 +4,8 @@ import { FaStop } from "react-icons/fa6";
 import { IoIosPause } from "react-icons/io";
 import ConversationContext from "../context/ConversationContext";
 import { PiDotsThreeOutlineFill } from "react-icons/pi";
+import { useNavigate } from "react-router-dom";
+
 
 export const InputBar = ({
   transcript,
@@ -15,11 +17,13 @@ export const InputBar = ({
   loading,
   startListening,
   browserSupportsContinuousListening,
-  resetTranscript
+  resetTranscript,
+  threadId
 }) => {
   const [started, setStarted] = useState(false);
   const { conversationCompleted } = useContext(ConversationContext);
   const [pause, setPause] = useState(false);
+  const navigate = useNavigate();
   
 
 
@@ -41,7 +45,7 @@ export const InputBar = ({
         <div className="w-full flex justify-center gap-10 items-center">
           {!started ? (
             <div
-              className=" rounded-xl bg-[#7C9DFF] p-4 px-6 items-center text-white font-semibold
+              className=" rounded-xl bg-[#7C9DFF] p-2 px-6 items-center text-white font-semibold
                     transition ease-in-out duration-200 cursor-pointer"
               onClick={() => {
                 handleStartConversation();
@@ -89,11 +93,22 @@ export const InputBar = ({
                 >
                   <IoIosPause className="text-white text-2xl" />
                 </button>
-              
             </>
           )}
         </div>
       </div>
+      {
+        started &&
+        <button className='mt-4 font-semibold text-white px-4 bg-blue-500 py-2 rounded-md w-auto disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-800' 
+              disabled={!conversationCompleted}
+              onClick={() => navigate(`/submit/${threadId}`)}
+              style={{
+                backgroundColor: conversationCompleted ? 'rgb(37 99 235)' : "rgb(75 85 99)",
+                transition: "backgroundColor 1s ease"
+              }}  
+          >Submit Request</button>
+      }
+      
     </div>
   );
 };

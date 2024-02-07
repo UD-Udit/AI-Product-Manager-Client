@@ -13,7 +13,7 @@ function App() {
         <Route path="/" element={
             <HomePage />
         } />
-        <Route path="/submit" element={ 
+        <Route path="/submit/:threadId" element={ 
             <SubmitPage />
         }/>
         <Route path="/thankyou" element={

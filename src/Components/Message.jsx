@@ -14,7 +14,7 @@ const Message = ({ loading, message }) => {
   };
 
   return (
-    <div className='text-lg font-semibold relative w-full text-center overflow-y-auto max-h-[45vh] p-2 text-blue-600 text-wrap '>
+    <div className='text-xl font-semibold relative w-full text-center overflow-y-auto max-h-[45vh] p-2 text-blue-600 text-wrap '>
       {renderMessage()}
     </div>
   );
