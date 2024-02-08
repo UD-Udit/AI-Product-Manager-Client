@@ -13,20 +13,33 @@ export const Response = ({ audioURL, message, loading, handleStart, messageNo}) 
   useEffect(() => {
     console.log(messageNo);
     if(messageNo === 0) return;
-    if(messageNo < 9){
+    if(messageNo < 9 && progressVal < 90){
       setProgressVal((progressVal) => progressVal+5);
     }else{
       setProgressVal((progressVal) => progressVal+2);
     }
-    if (message.includes("submit the conversation now") && !conversationCompleted) {
-      setConversationCompleted(true);
+    if ((message.includes("submit the conversation now") || message.includes("आप अगले कदमों के लिए चैट सबमिट कर सकते हैं।")) && !conversationCompleted) {
       setProgressVal(100);
+      setConversationCompleted(true);
     }
   }, [message, messageNo, conversationCompleted, setConversationCompleted]);
 
   return (
     <div className='h-[50vh] w-2/3 flex flex-col justify-center items-center'>
-      <Progress value={progressVal} color="blue" className="bg-transparent" size="sm"/>
+      {
+        message !== ""  && 
+        <div className="w-full">
+        <div className="mb-2 flex items-center justify-between gap-4">
+          <h3 className="text-white">
+            Completed
+          </h3>
+          <h3 className="text-white">
+            {progressVal > 100 ? "99" : progressVal}%
+          </h3>
+        </div>
+        <Progress value={progressVal} color="blue" className="bg-transparent" size="sm"/>
+        </div>
+      }
       <div className="relative h-[45vh] w-full flex items-center justify-center ">
           <div className="w-4/5 flex justify-center items-center h-auto bg-transparent rounded-xl p-2">
             {audioURL &&

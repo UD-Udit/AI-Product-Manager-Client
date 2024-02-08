@@ -7,6 +7,7 @@ import { PiDotsThreeOutlineFill } from "react-icons/pi";
 import { useNavigate } from "react-router-dom";
 
 
+
 export const InputBar = ({
   transcript,
   handleStart,
@@ -24,7 +25,8 @@ export const InputBar = ({
   const { conversationCompleted } = useContext(ConversationContext);
   const [pause, setPause] = useState(false);
   const navigate = useNavigate();
-  
+  const [language, setLanguage] = useState("");
+  const [error, setError] = useState(false);
 
 
   const handlePause = () => {
@@ -32,6 +34,18 @@ export const InputBar = ({
     if(browserSupportsContinuousListening){
       startListening({continuous: true});
     }
+  }
+  const handleChange = (e) => {
+    setLanguage(e.target.value);
+  }
+  const handleClick = () => {
+    setError(false);
+    if(language === ""){
+      setError(true);
+      return;
+    }
+    handleStartConversation(language);
+    setStarted(true);
   }
 
   return (
@@ -44,16 +58,32 @@ export const InputBar = ({
       <div className="w-3/5 flex justify-end px-6 py-2 rounded-lg text-lg tracking-wider">
         <div className="w-full flex justify-center gap-10 items-center">
           {!started ? (
+            <>
+            <div>
+            <select
+              className={`rounded-md outline-none bg-[#6161611e]  border-[1px]
+                            ${error?"border-red-900":"border-white"}
+                            p-2 px-6 text-white cursor-pointer appearance-auto `}
+              id="language"
+              value={language}
+              onChange={handleChange}
+            >
+              <option value="" className="bg-[#1e1c1c8d] rounded-md text-white disabled:text-blue-gray-800" disabled>Select Language</option>
+              <option value="English" className="bg-[#1e1c1c8d] rounded-md text-white">English</option>
+              <option value="Hindi" className="bg-[#1e1c1c8d] rounded-md text-white">Hindi</option>
+            </select>
+
+            </div>
+
             <div
-              className=" rounded-xl bg-[#7C9DFF] p-2 px-6 items-center text-white font-semibold
+              className=" rounded-md bg-[#6586e7] p-2 px-6 items-center text-white font-semibold
                     transition ease-in-out duration-200 cursor-pointer"
-              onClick={() => {
-                handleStartConversation();
-                setStarted(true);
-              }}
+              onClick={handleClick}
             >
               Start Conversation
             </div>
+            </>
+            
           ) : (
             <>
               <button

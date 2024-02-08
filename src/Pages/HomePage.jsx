@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Navbar } from "../Components/Navbar";
 import { InputBar } from "../Components/InputBar";
 import { Response } from "../Components/Response";
@@ -23,17 +23,25 @@ function HomePage() {
       resetTranscript
   } = useSpeechRecognition();
 
+  useEffect(() => {
+    const timeoutId = setTimeout(()=>{
+      if(transcript.trim() !== ''){
+        handleStop();
+      }
+    }, 3000);
+    return () => clearTimeout(timeoutId);
+  }, [transcript]);
 
 
   if (!browserSupportsSpeechRecognition) {
       return <alert>Browser doesn't support speech recognition.</alert>;
   }
 
-
   const handleStop = () => {
       SpeechRecognition.stopListening();
       handleAssistantCall(transcript);
   }
+
 
   const handleStart = () => {
       resetTranscript();
@@ -41,6 +49,9 @@ function HomePage() {
           SpeechRecognition.startListening({continuous: true});
       }
   } 
+
+  
+
 
 
   const handleAssistantCall = async(prompt) => {
@@ -64,8 +75,6 @@ function HomePage() {
         }
     }catch(e){
         console.log(e.message);
-
-        setMessage("Something went wrong...");
     }finally{
       setLoading(false);
     }
@@ -100,19 +109,21 @@ function HomePage() {
       setMessageNo((messageNo) => messageNo+1);
       
     }catch (error) {
-        setMessage("Something went wrong!");
+        setMessage("TTS Error!");
         console.error("Error during API call:", error.message);
     }finally{
       setLoading(false);
     }
   }
 
-  const handleStartConversation = async () => {
+  const handleStartConversation = async (language) => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "https://ai-product-manager.onrender.com/assistant/",
-        {},
+        "http://localhost:8080/assistant/",
+        {
+          language: language
+        },
         {
           headers: {
             "Content-Type": "application/json",
