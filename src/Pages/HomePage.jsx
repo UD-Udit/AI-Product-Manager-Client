@@ -120,7 +120,7 @@ function HomePage() {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:8080/assistant/",
+        "https://ai-product-manager.onrender.com/assistant/",
         {
           language: language
         },
