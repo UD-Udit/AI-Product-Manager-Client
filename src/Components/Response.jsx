@@ -11,15 +11,17 @@ export const Response = ({ audioURL, message, loading, handleStart, messageNo}) 
     const [progressVal, setProgressVal] = useState(0);
 
   useEffect(() => {
-    console.log(messageNo);
     if(messageNo === 0) return;
     if(messageNo < 9 && progressVal < 90){
       setProgressVal((progressVal) => progressVal+5);
     }else{
-      setProgressVal((progressVal) => progressVal+2);
-    }
+      if(progressVal+2 > 100){
+        setProgressVal(99);
+      }else{
+        setProgressVal((progressVal)=>progressVal+2);
+      }
+    };
     if ((message.includes("submit the conversation now") || message.includes("आप अगले कदमों के लिए चैट सबमिट कर सकते हैं।")) && !conversationCompleted) {
-      setProgressVal(100);
       setConversationCompleted(true);
     }
   }, [message, messageNo, conversationCompleted, setConversationCompleted]);
@@ -34,10 +36,10 @@ export const Response = ({ audioURL, message, loading, handleStart, messageNo}) 
             Completed
           </h3>
           <h3 className="text-white">
-            {progressVal > 100 ? "99" : progressVal}%
+            {conversationCompleted ? "100" : progressVal}%
           </h3>
         </div>
-        <Progress value={progressVal} color="blue" className="bg-transparent" size="sm"/>
+        <Progress value={conversationCompleted ? 100 : progressVal} color="blue" className="bg-transparent" size="sm"/>
         </div>
       }
       <div className="relative h-[45vh] w-full flex items-center justify-center ">

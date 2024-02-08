@@ -25,7 +25,6 @@ export const SubmitPage = () => {
             },
           }
         );
-        console.log(response.data);
         setConversation(response.data);
       } catch (e) {
         console.log(e.message);
