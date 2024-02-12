@@ -103,11 +103,11 @@ export const SubmitPage = () => {
 
   return (
     <div className='bg-[#121112] h-screen w-full flex justify-center items-center'>
-      <div className="w-1/2 rounded-md p-6 flex flex-col gap-4 justify-center items-center text-white">
+      <div className=" w-[90%] md:w-1/2 rounded-md p-6 flex flex-col gap-4 justify-center items-center text-white">
             <h2 className='text-center'>
             Thank you for taking the time to discuss your project with me. It was a pleasure learning about your vision and requirements. Rest assured, we will compile our conversation and formulate a detailed plan to ensure the successful execution of the project. To proceed, kindly provide your email for confirmation purposes. I look forward to our collaboration.
             </h2>
-            <div className="w-1/2 mt-2 h-auto flex flex-col gap-5">
+            <div className=" w-4/5 md:w-1/2 mt-2 h-auto flex flex-col gap-5">
               <input type="email" placeholder='Please enter your email' value={email} onChange={(e) => setEmail(e.target.value)} className='p-2 px-4 rounded-md bg-transparent outline-none border-blue-500 border-2 font-semibold text-white-700'/>
             </div>
 

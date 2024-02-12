@@ -17,7 +17,6 @@ export const InputBar = ({
   handleStartConversation,
   loading,
   startListening,
-  // browserSupportsContinuousListening,
   resetTranscript,
   threadId
 }) => {
@@ -32,12 +31,12 @@ export const InputBar = ({
   const handlePause = () => {
     setPause(false);
     startListening();
-    // if(browserSupportsContinuousListening){
-    // }
   }
+
   const handleChange = (e) => {
     setLanguage(e.target.value);
   }
+
   const handleClick = () => {
     setError(false);
     if(language === ""){
@@ -50,13 +49,13 @@ export const InputBar = ({
 
   return (
     <div className=" w-full flex justify-center items-center flex-col">
-      <div className="w-1/2 min-h-[7vh] flex justify-center items-center">
+      <div className=" w-4/5 md:w-1/2 min-h-[7vh] flex justify-center items-center">
         <p className="text-md text-white font-semibold text-center">
           {transcript}
         </p>
       </div>
-      <div className="w-3/5 flex justify-end px-6 py-2 rounded-lg text-lg tracking-wider">
-        <div className="w-full flex justify-center gap-10 items-center">
+      <div className=" w-full md:w-3/5 flex justify-end px-6 py-2 rounded-lg text-lg tracking-wider">
+        <div className="w-full flex md:flex-row flex-col justify-center gap-5 md:gap-10 items-center">
           {!started ? (
             <>
             <div>
@@ -85,7 +84,7 @@ export const InputBar = ({
             </>
             
           ) : (
-            <>
+            <div className="flex justify-center items-center gap-6">
               <button
                   className={`rounded-full bg-gray-500 w-12 h-12 items-center flex justify-center cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-800`}
                   disabled={conversationCompleted || loading}
@@ -123,7 +122,7 @@ export const InputBar = ({
                 >
                   <IoIosPause className="text-white text-2xl" />
                 </button>
-            </>
+            </div>
           )}
         </div>
       </div>
