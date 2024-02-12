@@ -17,7 +17,7 @@ export const InputBar = ({
   handleStartConversation,
   loading,
   startListening,
-  browserSupportsContinuousListening,
+  // browserSupportsContinuousListening,
   resetTranscript,
   threadId
 }) => {
@@ -31,9 +31,9 @@ export const InputBar = ({
 
   const handlePause = () => {
     setPause(false);
-    if(browserSupportsContinuousListening){
-      startListening({continuous: true});
-    }
+    startListening();
+    // if(browserSupportsContinuousListening){
+    // }
   }
   const handleChange = (e) => {
     setLanguage(e.target.value);
