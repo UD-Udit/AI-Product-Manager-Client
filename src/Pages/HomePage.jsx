@@ -3,8 +3,6 @@ import { Navbar } from "../Components/Navbar";
 import { InputBar } from "../Components/InputBar";
 import { Response } from "../Components/Response";
 import axios from "axios";
-import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
-
 
 function HomePage() {
   const [audioURL, setAudioURL] = useState(null);
@@ -15,71 +13,58 @@ function HomePage() {
   const [messageNo, setMessageNo] = useState(0);
   const apiKey = process.env.REACT_APP_API_KEY;
 
-  const {
-      transcript,
-      listening,
-      browserSupportsSpeechRecognition,
-      browserSupportsContinuousListening,
-      resetTranscript
-  } = useSpeechRecognition();
+  // WEBSPEECH
+  const [ listening, setListening ] = useState(false);
+  const [ transcript, setTranscript ] = useState("");
 
   useEffect(() => {
-    const timeoutId = setTimeout(()=>{
-      if(transcript.trim() !== ''){
-        handleStop();
-      }
-    }, 3000);
-    return () => clearTimeout(timeoutId);
-  }, [transcript]);
+    if (listening) {
+      console.log("Listening...");
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.continuous = true;
+      recognition.onresult = (event) => {
+        const currentTranscript = event.results[event.results.length - 1][0].transcript;
+        setTranscript(currentTranscript);
+        setListening(false);
+        handleAssistantCall(currentTranscript);
+      };
+      recognition.start();
 
-
-  if (!browserSupportsSpeechRecognition) {
-      return <alert>Browser doesn't support speech recognition.</alert>;
-  }
-
-  const handleStop = () => {
-      SpeechRecognition.stopListening();
-      handleAssistantCall(transcript);
-  }
-
-
-  const handleStart = () => {
-      resetTranscript();
-      if(browserSupportsContinuousListening){
-          SpeechRecognition.startListening({continuous: true});
-      }
-  } 
-
-  
-
-
-
-  const handleAssistantCall = async(prompt) => {
-    try{
-        setLoading(true);
-        if(prompt.length === 0) return;
-        const response = await axios.post("https://ai-product-manager.onrender.com/assistant/chat", {
-                message: prompt,
-                threadId: threadId,
-                assistantId: assistantId
-              },
-              {
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              }
-        )
-        if(response.data){
-            handleApiCall(response.data.content);
-            setMessage("Generating...");
+      const timeoutId = setTimeout(()=>{
+        if(transcript.trim() !== ''){
+          recognition.stop();
+          setListening(false);
         }
-    }catch(e){
-        console.log(e.message);
-    }finally{
+      }, 3000);
+      return () =>{ clearTimeout(timeoutId); };
+    }
+  }, [listening, transcript]);
+
+
+  const handleAssistantCall = async (prompt) => {
+    try {
+      setLoading(true);
+      if (prompt.trim().length === 0) return;
+      const response = await axios.post("https://ai-product-manager.onrender.com/assistant/chat", {
+        message: prompt,
+        threadId: threadId,
+        assistantId: assistantId
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.data) {
+        handleApiCall(response.data.content);
+        setMessage("Generating...");
+      }
+    } catch (e) {
+      console.log(e.message);
+    } finally {
       setLoading(false);
     }
   }
-  
 
   const handleApiCall = async (prompt) => {
     try {
@@ -119,17 +104,14 @@ function HomePage() {
   const handleStartConversation = async (language) => {
     try {
       setLoading(true);
-      const response = await axios.post(
-        "https://ai-product-manager.onrender.com/assistant/",
-        {
-          language: language
+      const response = await axios.post("https://ai-product-manager.onrender.com/assistant/", {
+        language: language
+      }, {
+        headers: {
+          "Content-Type": "application/json",
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      });
+
       const { assistantId, content, threadId } = response.data;
       setMessage("Generating...");
       setAssistantId(assistantId);
@@ -137,10 +119,25 @@ function HomePage() {
       handleApiCall(content);
     } catch (error) {
       console.log(error.message);
-    } finally{
+    } finally {
       setLoading(false);
     }
   };
+
+  const resetTranscript = () => {
+    setTranscript("");
+  }
+
+  const handleStart = () => {
+    resetTranscript();
+    setListening(true);
+  }
+
+  const handleStop = () => {
+    setListening(false);
+    handleApiCall(transcript);
+  }
+
 
   return (   
     <div className="w-full bg-[#121112] h-screen flex flex-col gap-2">
@@ -158,11 +155,10 @@ function HomePage() {
         handleStart = {handleStart}
         handleStop={handleStop}
         listening={listening}
-        stopListening={SpeechRecognition.stopListening}
+        stopListening={() => setListening(false)}
         handleStartConversation={handleStartConversation}
         loading={loading}
-        startListening = {SpeechRecognition.startListening}
-        browserSupportsContinuousListening = {browserSupportsContinuousListening}
+        startListening={()=>setListening(true)}
         resetTranscript={resetTranscript}
         threadId={threadId}
       />
@@ -174,3 +170,4 @@ function HomePage() {
 }
 
 export default HomePage;
+
