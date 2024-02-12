@@ -27,7 +27,7 @@ export const Response = ({ audioURL, message, loading, handleStart, messageNo}) 
   }, [message, messageNo, conversationCompleted, setConversationCompleted]);
 
   return (
-    <div className='h-[50vh] w-2/3 flex flex-col justify-center items-center'>
+    <div className='h-[50vh] w-[90%] md:w-2/3 flex flex-col justify-center items-center'>
       {
         message !== ""  && 
         <div className="w-full">
@@ -43,7 +43,7 @@ export const Response = ({ audioURL, message, loading, handleStart, messageNo}) 
         </div>
       }
       <div className="relative h-[45vh] w-full flex items-center justify-center ">
-          <div className="w-4/5 flex justify-center items-center h-auto bg-transparent rounded-xl p-2">
+          <div className="w-full md:w-4/5 flex justify-center items-center h-auto bg-transparent rounded-xl p-2">
             {audioURL &&
               <ReactPlayer url={audioURL} playing width={0} onEnded={conversationCompleted ? ()=>{console.log("Conversation completed!");} : handleStart} />
             }

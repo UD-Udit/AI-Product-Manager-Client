@@ -24,16 +24,16 @@ function HomePage() {
       recognition.continuous = true;
       recognition.onresult = (event) => {
         const currentTranscript = event.results[event.results.length - 1][0].transcript;
-        setTranscript(currentTranscript);
         setListening(false);
+        setTranscript(currentTranscript);
         handleAssistantCall(currentTranscript);
       };
       recognition.start();
 
       const timeoutId = setTimeout(()=>{
         if(transcript.trim() !== ''){
-          recognition.stop();
           setListening(false);
+          recognition.stop();
         }
       }, 3000);
       return () =>{ clearTimeout(timeoutId); };
@@ -142,7 +142,7 @@ function HomePage() {
   return (   
     <div className="w-full bg-[#121112] h-screen flex flex-col gap-2">
       <Navbar />
-      <div className=" flex gap-6 flex-col justify-center items-center">
+      <div className=" flex gap-10 md:gap-6 flex-col justify-center items-center">
       
       <Response 
         audioURL={audioURL} 
