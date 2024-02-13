@@ -39,7 +39,14 @@ export const Response = ({ audioURL, message, loading, handleStart, messageNo}) 
       
       audioElement.play();
     }
-  }, [audioURL]);
+  }, [audioURL, conversationCompleted]);
+
+  // const handlePlayButtonClick = () => {
+  //   if (audioURL) {
+  //     const audioElement = new Audio(audioURL);
+  //     audioElement.play();
+  //   }
+  // };
 
   return (
     <div className='h-[50vh] w-[90%] md:w-2/3 flex flex-col justify-center items-center'>
@@ -62,6 +69,7 @@ export const Response = ({ audioURL, message, loading, handleStart, messageNo}) 
             {/* {audioURL &&
               <ReactPlayer url={audioURL} playing width={0} onEnded={conversationCompleted ? ()=>{console.log("Conversation completed!");} : handleStart} />
             } */}
+            {/* <button onClick={handlePlayButtonClick}>Play</button> */}
               <Message loading={loading} message={message} />
           </div>
       </div>

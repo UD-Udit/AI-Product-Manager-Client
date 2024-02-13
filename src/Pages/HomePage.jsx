@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Navbar } from "../Components/Navbar";
 import { InputBar } from "../Components/InputBar";
 import { Response } from "../Components/Response";
@@ -16,6 +16,7 @@ function HomePage() {
   // WEBSPEECH
   const [ listening, setListening ] = useState(false);
   const [ transcript, setTranscript ] = useState("");
+  const recognitionRef = useRef(null);
 
   useEffect(() => {
     if (listening) {
@@ -28,6 +29,8 @@ function HomePage() {
         setTranscript(currentTranscript);
         handleAssistantCall(currentTranscript);
       };
+      recognitionRef.current = recognition;
+      recognitionRef.current.playsinline = true;
       recognition.start();
 
       const timeoutId = setTimeout(()=>{
@@ -139,6 +142,14 @@ function HomePage() {
   }
 
 
+  const pauseListening = () => {
+    if (recognitionRef.current) {
+      setListening(false);
+      recognitionRef.current.stop();
+    }
+  }
+
+
   return (   
     <div className="w-full bg-[#121112] h-screen flex flex-col gap-2">
       <Navbar />
@@ -155,7 +166,7 @@ function HomePage() {
         handleStart = {handleStart}
         handleStop={handleStop}
         listening={listening}
-        stopListening={() => setListening(false)}
+        stopListening={pauseListening}
         handleStartConversation={handleStartConversation}
         loading={loading}
         startListening={()=>setListening(true)}
