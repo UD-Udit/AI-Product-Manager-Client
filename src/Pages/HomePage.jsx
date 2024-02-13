@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Navbar } from "../Components/Navbar";
 import { InputBar } from "../Components/InputBar";
 import { Response } from "../Components/Response";
@@ -16,40 +16,29 @@ function HomePage() {
   // WEBSPEECH
   const [ listening, setListening ] = useState(false);
   const [ transcript, setTranscript ] = useState("");
-  const timeoutRef = useRef(null);
 
   useEffect(() => {
     if (listening) {
       console.log("Listening...");
       const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
       recognition.continuous = true;
-      recognition.interimResults = true;
       recognition.onresult = (event) => {
-        let interimTranscript = "";
-
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          if (!event.results[i].isFinal) {
-            interimTranscript += event.results[i][0].transcript + " ";
-
-          }
-        }
-        if (interimTranscript !== "") {
-          setTranscript(interimTranscript);
-          clearTimeout(timeoutRef.current);
-          timeoutRef.current = setTimeout(() => {
-            setListening(false);
-            recognition.stop();
-            handleAssistantCall(interimTranscript);
-          }, 3000);
-        }
+        const currentTranscript = event.results[event.results.length - 1][0].transcript;
+        setListening(false);
+        setTranscript(currentTranscript);
+        handleAssistantCall(currentTranscript);
       };
       recognition.start();
-      return () => {
-        clearTimeout(timeoutRef.current);
-        recognition.stop();
-      };
+
+      const timeoutId = setTimeout(()=>{
+        if(transcript.trim() !== ''){
+          setListening(false);
+          recognition.stop();
+        }
+      }, 3000);
+      return () =>{ clearTimeout(timeoutId); };
     }
-  }, [listening]);
+  }, [listening, transcript]);
 
 
   const handleAssistantCall = async (prompt) => {
