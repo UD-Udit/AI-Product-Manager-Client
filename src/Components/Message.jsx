@@ -15,7 +15,9 @@ const Message = ({ loading, message }) => {
 
   return (
     <div className='md:text-2xl text-lg font-semibold relative w-full text-center overflow-y-auto max-h-[45vh] p-2 text-blue-600 text-wrap '>
-      {renderMessage()}
+      {
+        renderMessage()
+      }
     </div>
   );
 };

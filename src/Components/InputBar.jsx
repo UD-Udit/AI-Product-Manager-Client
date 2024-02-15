@@ -86,7 +86,7 @@ export const InputBar = ({
           ) : (
             <div className="flex justify-center items-center gap-6">
               <button
-                  className={`rounded-full bg-gray-500 w-12 h-12 items-center flex justify-center cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-800`}
+                  className={`rounded-full bg-gray-500 w-12 h-12 items-center flex justify-center cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-800 active:scale-90`}
                   disabled={conversationCompleted || loading}
                 >
                   <FaStop
@@ -99,7 +99,7 @@ export const InputBar = ({
                 </button>
                 
               <button
-                className={`rounded-full bg-[#7C9DFF] w-14 h-14 items-center flex justify-center cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-800`}
+                className={`rounded-full bg-[#7C9DFF] w-16 h-16 items-center flex justify-center cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-800 active:scale-90`}
                 disabled={conversationCompleted || loading}
               >
                 {listening ? (
@@ -116,7 +116,7 @@ export const InputBar = ({
               </button>
 
               <button
-                  className={`rounded-full bg-gray-600  w-12 h-12 items-center flex justify-center cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-800`}
+                  className={`rounded-full bg-gray-600  w-12 h-12 items-center flex justify-center cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-800 active:scale-90`}
                   onClick={() => {stopListening(); setPause(true)}}
                   disabled={conversationCompleted || loading}
                 >
@@ -137,7 +137,6 @@ export const InputBar = ({
               }}  
           >Submit Request</button>
       }
-      
     </div>
   );
 };

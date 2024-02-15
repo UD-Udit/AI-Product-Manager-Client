@@ -6,7 +6,7 @@ import { Progress } from "@material-tailwind/react";
 export const Response = ({ audioURL, message, loading, handleStart, messageNo}) => {
   const {
     conversationCompleted, 
-    setConversationCompleted} = useContext(ConversationContext);
+    setConversationCompleted } = useContext(ConversationContext);
     const [progressVal, setProgressVal] = useState(0);
 
   useEffect(() => {
@@ -41,13 +41,6 @@ export const Response = ({ audioURL, message, loading, handleStart, messageNo}) 
     }
   }, [audioURL, conversationCompleted]);
 
-  // const handlePlayButtonClick = () => {
-  //   if (audioURL) {
-  //     const audioElement = new Audio(audioURL);
-  //     audioElement.play();
-  //   }
-  // };
-
   return (
     <div className='h-[50vh] w-[90%] md:w-2/3 flex flex-col justify-center items-center'>
       {
@@ -66,10 +59,6 @@ export const Response = ({ audioURL, message, loading, handleStart, messageNo}) 
       }
       <div className="relative h-[45vh] w-full flex items-center justify-center ">
           <div className="w-full md:w-4/5 flex justify-center items-center h-auto bg-transparent rounded-xl p-2">
-            {/* {audioURL &&
-              <ReactPlayer url={audioURL} playing width={0} onEnded={conversationCompleted ? ()=>{console.log("Conversation completed!");} : handleStart} />
-            } */}
-            {/* <button onClick={handlePlayButtonClick}>Play</button> */}
               <Message loading={loading} message={message} />
           </div>
       </div>
