@@ -13,7 +13,7 @@ export const InputBar = ({
   handleStart,
   handleStop,
   listening,
-  stopListening,
+  pauseListening,
   handleStartConversation,
   loading,
   startListening,
@@ -93,7 +93,7 @@ export const InputBar = ({
                     className="text-white text-2xl"
                     onClick={() => {
                       resetTranscript();
-                      stopListening();
+                      pauseListening();
                     }}
                   />
                 </button>
@@ -117,7 +117,7 @@ export const InputBar = ({
 
               <button
                   className={`rounded-full bg-gray-600  w-12 h-12 items-center flex justify-center cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-800 active:scale-90`}
-                  onClick={() => {stopListening(); setPause(true)}}
+                  onClick={() => {pauseListening(); setPause(true)}}
                   disabled={conversationCompleted || loading}
                 >
                   <IoIosPause className="text-white text-2xl" />

@@ -17,46 +17,37 @@ function HomePage() {
   const [ listening, setListening ] = useState(false);
   const [ transcript, setTranscript ] = useState("");
   const recognitionRef = useRef(null);
-  const timeoutRef = useRef(null);
 
   useEffect(() => {
     if (listening) {
       const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
       recognition.continuous = true;
-      recognition.interimResults = true;
       recognition.onresult = (event) => {
-        let interimTranscript = "";
-
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          if (!event.results[i].isFinal) {
-            interimTranscript += event.results[i][0].transcript + " ";
-
-          }
-        }
-        if (interimTranscript !== "") {
-          setTranscript(interimTranscript);
-          clearTimeout(timeoutRef.current);
-          timeoutRef.current = setTimeout(() => {
-            setListening(false);
-            recognition.stop();
-            handleAssistantCall(interimTranscript);
-          }, 2500);
-        }
+        const currentTranscript = event.results[event.results.length - 1][0].transcript;
+          setListening(false);
+          setTranscript(currentTranscript);
+          handleAssistantCall(currentTranscript);
       };
       recognitionRef.current = recognition;
       recognitionRef.current.playsinline = true;
       recognition.start();
-      return () => {
-        clearTimeout(timeoutRef.current);
-        recognition.stop();
-      };
+
+      const timeoutId = setTimeout(()=>{
+        if(transcript.trim() !== ''){
+          setListening(false);
+          recognition.stop();
+        }
+      }, 3000);
+      return () =>{ clearTimeout(timeoutId); };
     }
-  }, [listening]);
+    else{
+      return;
+    }
+  }, [listening, transcript]);
 
 // AI Assistant for generating response
   const handleAssistantCall = async (prompt) => {
     try {
-      console.log("Getting request!!!");
       setLoading(true);
       if (prompt.trim().length === 0) return;
       const response = await axios.post("https://ai-product-manager.onrender.com/assistant/chat", {
@@ -84,7 +75,10 @@ function HomePage() {
   const handleApiCall = async (prompt) => {
     try {
       setLoading(true);
-      if(prompt.length === 0) return;
+      if(prompt.length === 0) {
+        setLoading(false);
+        return;
+      };
       const response = await fetch(`https://api.openai.com/v1/audio/speech`, {
         method: 'POST',
         headers: {
@@ -150,13 +144,14 @@ function HomePage() {
 
   const handleStop = () => {
     setListening(false);
-    handleApiCall(transcript);
+    handleAssistantCall(transcript);
   }
 
 
-  const stopListening = () => {
+  const pauseListening = () => {
     if (recognitionRef.current) {
       setListening(false);
+      recognitionRef.current.onresult = null;
       recognitionRef.current.stop();
     }
   }
@@ -178,7 +173,7 @@ function HomePage() {
         handleStart = {handleStart}
         handleStop={handleStop}
         listening={listening}
-        stopListening={stopListening}
+        pauseListening={pauseListening}
         handleStartConversation={handleStartConversation}
         loading={loading}
         startListening={()=>setListening(true)}
