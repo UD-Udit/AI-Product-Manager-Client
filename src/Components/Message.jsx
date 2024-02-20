@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import ConversationContext from '../context/ConversationContext';
 
-const Message = ({ loading, message }) => {
-   
+const Message = ({ message }) => {
+  
+  const {loading, processing} = useContext(ConversationContext);
+
   const renderMessage = () => {
-    
     if (loading) {
       return "Loading...";
+    } else if(processing){
+      return "Generating...";
     } else if (message.length === 0) {
       return <span><i>I</i> will assist you in creating your project. <br/> Hit <i className='font-bold'>Start Conversation</i> Button to get started!</span>;
     } else {

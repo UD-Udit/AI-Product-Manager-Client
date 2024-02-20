@@ -15,18 +15,16 @@ export const InputBar = ({
   listening,
   pauseListening,
   handleStartConversation,
-  loading,
   startListening,
   resetTranscript,
   threadId
 }) => {
   const [started, setStarted] = useState(false);
-  const { conversationCompleted } = useContext(ConversationContext);
+  const { conversationCompleted, playing, loading, processing } = useContext(ConversationContext);
   const [pause, setPause] = useState(false);
   const navigate = useNavigate();
   const [language, setLanguage] = useState("");
   const [error, setError] = useState(false);
-
 
   const handlePause = () => {
     setPause(false);
@@ -87,7 +85,7 @@ export const InputBar = ({
             <div className="flex justify-center items-center gap-6">
               <button
                   className={`rounded-full bg-gray-500 w-12 h-12 items-center flex justify-center cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-800 active:scale-90`}
-                  disabled={conversationCompleted || loading}
+                  disabled={conversationCompleted || loading || playing || processing}
                 >
                   <FaStop
                     className="text-white text-2xl"
@@ -100,7 +98,7 @@ export const InputBar = ({
                 
               <button
                 className={`rounded-full bg-[#7C9DFF] w-16 h-16 items-center flex justify-center cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-800 active:scale-90`}
-                disabled={conversationCompleted || loading}
+                disabled={conversationCompleted || loading || playing || processing}
               >
                 {listening ? (
                   <PiDotsThreeOutlineFill
@@ -118,7 +116,7 @@ export const InputBar = ({
               <button
                   className={`rounded-full bg-gray-600  w-12 h-12 items-center flex justify-center cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-800 active:scale-90`}
                   onClick={() => {pauseListening(); setPause(true)}}
-                  disabled={conversationCompleted || loading}
+                  disabled={conversationCompleted || loading || playing || processing}
                 >
                   <IoIosPause className="text-white text-2xl" />
                 </button>
