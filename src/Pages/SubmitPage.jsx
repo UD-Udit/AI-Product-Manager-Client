@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import ConversationContext from '../context/ConversationContext';
 import axios from 'axios';
 import {useNavigate, useParams} from "react-router-dom";
+import baseURL from '../config';
 
 export const SubmitPage = () => {
 
@@ -18,7 +19,7 @@ export const SubmitPage = () => {
       try {
         if (!threadId) return;
         const response = await axios.get(
-          `https://ai-product-manager.onrender.com/assistant/${threadId}`,
+          `${baseURL}/assistant/${threadId}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -44,7 +45,7 @@ export const SubmitPage = () => {
         console.log("Conversation not found!");
         return;
       }
-      const response = await axios.post("https://ai-product-manager.onrender.com/prompt/getSummary", {
+      const response = await axios.post(`${baseURL}/prompt/getSummary`, {
         email: email,
         conversation: conversation.messages,
       },{
@@ -77,7 +78,7 @@ export const SubmitPage = () => {
       setLoading(true);
       setError("");
       setMessage("Saving Conversation...");
-      const response = await axios.post("https://ai-product-manager.onrender.com/submitConversation", {
+      const response = await axios.post(`${baseURL}/submitConversation`, {
         email: email,
         conversation: conversation.messages,
       }, {
@@ -100,7 +101,6 @@ export const SubmitPage = () => {
   }
 
   
-
   return (
     <div className='bg-[#121112] h-screen w-full flex justify-center items-center'>
       <div className=" w-[90%] md:w-1/2 rounded-md p-6 flex flex-col gap-4 justify-center items-center text-white">

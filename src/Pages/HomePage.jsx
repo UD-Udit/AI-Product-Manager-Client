@@ -3,6 +3,7 @@ import { Navbar } from "../Components/Navbar";
 import { InputBar } from "../Components/InputBar";
 import { Response } from "../Components/Response";
 import axios from "axios";
+import baseURL from "../config";
 
 function HomePage() {
   const [audioURL, setAudioURL] = useState(null);
@@ -50,7 +51,7 @@ function HomePage() {
     try {
       setLoading(true);
       if (prompt.trim().length === 0) return;
-      const response = await axios.post("https://ai-product-manager.onrender.com/assistant/chat", {
+      const response = await axios.post(`${baseURL}/assistant/chat`, {
         message: prompt,
         threadId: threadId,
         assistantId: assistantId
@@ -113,7 +114,7 @@ function HomePage() {
   const handleStartConversation = async (language) => {
     try {
       setLoading(true);
-      const response = await axios.post("https://ai-product-manager.onrender.com/assistant/", {
+      const response = await axios.post(`${baseURL}/assistant/`, {
         language: language
       }, {
         headers: {
