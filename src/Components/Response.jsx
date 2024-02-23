@@ -25,8 +25,8 @@ export const Response = ({ audioURL, message, handleStart, messageNo, pauseListe
     }
   }, [message, messageNo, conversationCompleted, setConversationCompleted]);
 
-  useEffect(()=>{
-    if(audioURL){
+  useEffect(() => {
+    if (audioURL) {
       const audioElement = new Audio(audioURL);
       setPlaying(true);
       audioElement.addEventListener('ended', () => {
@@ -39,9 +39,25 @@ export const Response = ({ audioURL, message, handleStart, messageNo, pauseListe
         }
       });
       
-      audioElement.play();
+      // Create a button and attach a click event listener
+      const button = document.createElement('button');
+      button.setAttribute('id', 'audioButton');
+      button.style.display = 'none';
+      document.body.appendChild(button);
+  
+      const clickButton = () => {
+        audioElement.play(); // Play the audio when the button is clicked
+        button.removeEventListener('click', clickButton); // Remove the event listener after clicking
+        document.body.removeChild(button); // Remove the button after clicking
+      };
+  
+      button.addEventListener('click', clickButton); // Attach the click event listener to the button
+  
+      // Trigger button click programmatically
+      button.click();
     }
   }, [audioURL, conversationCompleted]);
+  
 
   return (
     <div className='h-[50vh] w-[90%] md:w-2/3 flex flex-col justify-center items-center'>
